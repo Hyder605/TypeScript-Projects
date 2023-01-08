@@ -53,7 +53,8 @@ async function main(){
         let st1=new Student(student_details.usr_input,student_details.usr_input1,student_details.usr_input2);
         student_List.push(st1);
         st1.registerForCourse(student_details.std_course)
-
+        
+        //Loop=> for giving option to Assigning more courses to teacher
         do {
             
             let student_que = await inquirer.prompt([
@@ -134,13 +135,53 @@ async function main(){
         type:"number",
         name:"teacher_input2",
         message:"Enter the Salary of a Teacher."
+    },
+    {
+        type:"list",
+        name:"assg_course",
+        message:"Choose the Course which you want to Assign to Teacher",
+        choices:list_Course
     }
     
     
     ])
     let t1=new Instructor(teacher_details.teacher_input,teacher_details.teacher_input1,teacher_details.teacher_input1)
     teacher_List.push(t1)
+    t1.assignCourse(teacher_details.assg_course)
+    //Loop=> for giving option to Assigning more courses to teacher
+    do {         
+            let teacher_course = await inquirer.prompt([
+                {
+                    type: "list",
+                    name: "teach_assigncourse",
+                    message:"Do you want to Assign  more Courses",
+                    choices: ["YES", 
+                            "NO"
+                    ]
+                }
+            ]);
+            if(teacher_course.teach_assigncourse==="YES"){
+                    let teacher_courseUpdate = await inquirer.prompt(
+                    {
+                        type: "list",
+                        name: "teacher_courseF",
+                        message:"Choose the Course which you want to Assign",
+                        choices:list_Course
+                    }
+                )
+                t1.assignCourse(teacher_courseUpdate.teacher_courseF)
+                
+            }else if(teacher_course.teach_assigncourse==="NO"){
+                return false
+                
+            }
+            
+            
+        } while (true);
     };
+
+
+
 
     //Adding list of Teacher
     if(que.usr_input === "5.list of Teachers"){

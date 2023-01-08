@@ -1,3 +1,4 @@
+#! /usr/bin/env node
 import inquirer from "inquirer";
 import { Student } from "./main.js";
 import { Instructor } from "./main.js";
@@ -16,7 +17,7 @@ async function main() {
                 "3.Add Teachers",
                 "4.list of Students",
                 "5.list of Teachers",
-                "6.Update Student Credentials/Course"]
+            ]
         }
     ]);
     if (que.usr_input === "1.Add Students") {
@@ -72,7 +73,7 @@ async function main() {
         } while (true);
     }
     ;
-    //Addind courses
+    //Adding courses
     if (que.usr_input === "2.Add Courses") {
         let course_details = await inquirer.prompt([
             {
@@ -112,10 +113,42 @@ async function main() {
                 type: "number",
                 name: "teacher_input2",
                 message: "Enter the Salary of a Teacher."
+            },
+            {
+                type: "list",
+                name: "assg_course",
+                message: "Choose the Course which you want to Assign to Teacher",
+                choices: list_Course
             }
         ]);
         let t1 = new Instructor(teacher_details.teacher_input, teacher_details.teacher_input1, teacher_details.teacher_input1);
         teacher_List.push(t1);
+        //////////////
+        t1.assignCourse(teacher_details.assg_course);
+        do {
+            let teacher_course = await inquirer.prompt([
+                {
+                    type: "list",
+                    name: "teach_assigncourse",
+                    message: "Do you want to Assign  more Courses",
+                    choices: ["YES",
+                        "NO"
+                    ]
+                }
+            ]);
+            if (teacher_course.teach_assigncourse === "YES") {
+                let teacher_courseUpdate = await inquirer.prompt({
+                    type: "list",
+                    name: "teacher_courseF",
+                    message: "Choose the Course which you want to Assign",
+                    choices: list_Course
+                });
+                t1.assignCourse(teacher_courseUpdate.teacher_courseF);
+            }
+            else if (teacher_course.teach_assigncourse === "NO") {
+                return false;
+            }
+        } while (true);
     }
     ;
     //Adding list of Teacher
@@ -125,13 +158,12 @@ async function main() {
     ;
 }
 do {
-    console.clear;
     await main();
     let s = true;
     var repeatLoop = await inquirer.prompt({
         type: "list",
         name: "Repeat",
-        message: "Do you want to continue",
+        message: "Do you want to continue and Perform some other Operations??",
         choices: [
             "Yes", "No"
         ]
