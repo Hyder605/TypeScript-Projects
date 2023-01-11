@@ -12,7 +12,7 @@ let student_List:object[]=[]
 let teacher_List:object[]=[]
 let list_Course:object[]=[{id:"M1",name:"MetaVerse"},{id:"BCC",name:"BlockChain"}]
 async function main(){
-    let que = await inquirer.prompt([
+    let que:{usr_input:string} = await inquirer.prompt([
         {
             type: "list",
             name: "usr_input",
@@ -23,8 +23,11 @@ async function main(){
             "4.list of Students",
             "5.list of Teachers",
             ]
+            
         }
+        
     ]);
+    
     if(que.usr_input === "1.Add Students"){
         let student_details = await inquirer.prompt([
         {
@@ -53,7 +56,7 @@ async function main(){
         let st1=new Student(student_details.usr_input,student_details.usr_input1,student_details.usr_input2);
         student_List.push(st1);
         st1.registerForCourse(student_details.std_course)
-        
+
         //Loop=> for giving option to Assigning more courses to teacher
         do {
             
@@ -91,7 +94,7 @@ async function main(){
 
     //Adding courses
     if(que.usr_input === "2.Add Courses"){
-        let course_details = await inquirer.prompt([
+        let course_details= await inquirer.prompt([
         {
             type: "input",
             name: "course_input",
